@@ -1,0 +1,24 @@
+{
+  "name": "clonetabnews",
+  "version": "1.0.0",
+  "description": "Projeto do curso.dev para clonar o TabNews.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KleisonVitt/CloneTabNews.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KleisonVitt/CloneTabNews/issues"
+  },
+  "homepage": "https://github.com/KleisonVitt/CloneTabNews#readme",
+  "dependencies": {
+    "next": "13.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
+}
