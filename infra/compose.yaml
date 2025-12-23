@@ -1,8 +1,8 @@
 services:
   database:
     image: "postgres:16-alpine3.23"
-    environment:
-      POSTGRES_PASSWORD: "local"
+    env_file:
+      - ../.env
     ports:
       - "5434:5432"
 # host : container

@@ -8,7 +8,7 @@
     "lint:check": "prettier --check .",
     "lint:fix": "prettier --write .",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watchAll"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/KleisonVitt/CloneTabNews#readme",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "next": "13.1.6",
+    "pg": "^8.11.3",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
