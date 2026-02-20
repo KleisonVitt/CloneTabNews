@@ -29,10 +29,12 @@ async function getNewClient() {
   return client;
 }
 
-export default {
+const database = {
   query,
   getNewClient,
 };
+
+export default database;
 
 function getSslValues() {
   if (process.env.POSTGRES_CA) {
