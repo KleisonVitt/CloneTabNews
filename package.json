@@ -4,21 +4,21 @@
   "description": "Projeto do curso.dev para clonar o TabNews.",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run services:up && npm run services:wait-database && npm run migration:up && next dev",
+    "dev": "npm run services:up && npm run services:wait-database && npm run migrations:up && next dev",
     "services:up": "docker compose -f infra/compose.yaml up -d",
     "services:down": "docker compose -f infra/compose.yaml down",
     "services:stop": "docker compose -f infra/compose.yaml stop",
     "services:wait-database": "node infra/scripts/waitForPostgres.js",
+    "migrations:create": "node-pg-migrate --migrations-dir infra/migrations create",
+    "migrations:up": "node-pg-migrate --migrations-dir infra/migrations --envPath .env.development up",
     "lint:prettier-check": "prettier --check .",
     "lint:prettier-fix": "prettier --write .",
+    "lint:secret": "secretlint \"**/*\"",
     "lint:next-eslint-check": "next lint --dir .",
     "test": "npm run services:up && concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand\"",
     "test:watch": "jest --watchAll --runInBand",
-    "migration:create": "node-pg-migrate --migrations-dir infra/migrations create",
-    "migration:up": "node-pg-migrate --migrations-dir infra/migrations --envPath .env.development up",
     "prepare": "husky",
-    "commit": "cz",
-    "lint:secret": "secretlint \"**/*\""
+    "commit": "cz"
   },
   "repository": {
     "type": "git",
