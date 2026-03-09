@@ -1,35 +1,38 @@
 exports.shorthands = undefined;
 
 exports.up = (pgm) => {
-  pgm.createTable("users", {
+  pgm.createTable("sessions", {
     id: {
       type: "uuid",
       primaryKey: true,
       default: pgm.func("gen_random_uuid()"),
     },
-    // For reference, GitHub limits usernames to 39 characters.
-    username: {
-      type: "varchar(30)",
+
+    // length inspired in facebook
+    token: {
+      type: "varchar(96)",
       notNull: true,
       unique: true,
     },
-    // Why 254 in length? https://stackoverflow.com/a/1199238
-    email: {
-      type: "varchar(254)",
+
+    user_id: {
+      type: "uuid",
       notNull: true,
-      unique: true,
+      // references: "users",
     },
-    // Why 60 in length? https://www.npmjs.com/package/bcrypt#hash-info
-    password: {
-      type: "varchar(60)",
+
+    expires_at: {
+      type: "timestamptz",
       notNull: true,
     },
+
     // Why timestamp with zone? https://justatheory.com/2012/04/postgres-use-timestamptz/
     created_at: {
       type: "timestamptz",
       notNull: true,
       default: pgm.func("timezone('utc', now())"),
     },
+
     updated_at: {
       type: "timestamptz",
       notNull: true,
