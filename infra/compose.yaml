@@ -6,4 +6,10 @@ services:
       - ../.env.development
     ports:
       - "5434:5432"
-# host : container
+  # host : container
+  mailcatcher:
+    container_name: "mailcatcher-dev"
+    image: "sj26/mailcatcher"
+    ports:
+      - "1025:1025" # SMTP Server
+      - "1080:1080" # Mailcatcher Client
