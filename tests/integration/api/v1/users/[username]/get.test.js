@@ -28,7 +28,7 @@ describe("GET /api/v1/users/[username]", () => {
         username: "MesmoCase",
         email: "mesmo.case@email.com",
         password: response2Body.password,
-        features: [],
+        features: ["read:activation-token"],
         created_at: response2Body.created_at,
         updated_at: response2Body.updated_at,
       });
@@ -57,7 +57,7 @@ describe("GET /api/v1/users/[username]", () => {
         username: "MisMatchCase",
         email: "MisMatchCase.case@email.com",
         password: response2Body.password,
-        features: [],
+        features: ["read:activation-token"],
         created_at: response2Body.created_at,
         updated_at: response2Body.updated_at,
       });
