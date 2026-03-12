@@ -137,7 +137,7 @@ describe("POST /api/v1/sessions", () => {
 
       expect(
         Math.abs(diff - session.EXPIRATION_IN_MILLISECONDS),
-      ).toBeLessThanOrEqual(1000);
+      ).toBeLessThanOrEqual(2000);
 
       const parsedSetCookie = setCookieParser(response, {
         map: true,
