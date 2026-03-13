@@ -9,7 +9,7 @@ exports.up = (pgm) => {
     },
 
     used_at: {
-      type: "uuid",
+      type: "timestamptz",
       notNull: false,
     },
 
