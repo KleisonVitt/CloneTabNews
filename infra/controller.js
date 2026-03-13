@@ -14,6 +14,8 @@ function onNoMatchHandler(request, response) {
 }
 
 function onErrorHandler(error, request, response) {
+  console.error(error);
+
   if (error instanceof ValidationError || error instanceof NotFoundError) {
     return response.status(error.statusCode).json(error);
   }
@@ -23,11 +25,20 @@ function onErrorHandler(error, request, response) {
     return response.status(error.statusCode).json(error);
   }
 
+  if (process.env.NODE_ENV !== "production") {
+    return response.status(500).json({
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      cause: error.cause,
+    });
+  }
+
   const publicErrorObject = new InternalServerError({
     cause: error,
   });
 
-  response.status(publicErrorObject.statusCode).json(publicErrorObject);
+  return response.status(publicErrorObject.statusCode).json(publicErrorObject);
 }
 
 async function setSessionCookie(sessionToken, response) {
