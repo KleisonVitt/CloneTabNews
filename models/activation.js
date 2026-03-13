@@ -2,6 +2,7 @@ import database from "infra/database.js";
 import email from "infra/email.js";
 import { NotFoundError } from "infra/errors";
 import webserver from "infra/webserver.js";
+import user from "models/user.js";
 
 const EXPIRATION_IN_MILLISECONDS = 60 * 15 * 1000;
 
@@ -76,31 +77,41 @@ Equipe CloneTabNews
   });
 }
 
-async function markTokenAsUsed(tokenId) {
-  const result = await database.query({
-    text: `
-    INSERT INTO
-      user_activation_tokens (used_at, updated_at)
-    VALUES
-      (NOW(), NOW())
-    WHERE
-      id = $1
-    RETURNING
-      *
-    ;`,
-    values: [tokenId],
-  });
+async function markTokenAsUsed(activationTokenId) {
+  const usedActivationToken = await runUpdateQuery(activationTokenId);
+  return usedActivationToken;
 
-  return result.rows[0];
+  async function runUpdateQuery(activationTokenId) {
+    const result = await database.query({
+      text: `
+      UPDATE
+        user_activation_tokens
+      SET
+        used_at = timezone('utc', NOW()),
+        updated_at = timezone('utc', NOW())
+      WHERE
+        id = $1
+      RETURNING
+        *
+      ;`,
+      values: [activationTokenId],
+    });
+
+    return result.rows[0];
+  }
 }
 
-async function activateUserByUserId() {}
+async function activateUserByUserId(userId) {
+  const activatedUser = await user.setFeatures(userId, ["create:session"]);
+  return activatedUser;
+}
 
 const activation = {
   sendEmailToUser,
   findOneValidById,
   create,
   markTokenAsUsed,
+  activateUserByUserId,
 };
 
 export default activation;
