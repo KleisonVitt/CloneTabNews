@@ -97,7 +97,7 @@ function injectAnonymousUser(request) {
   };
 
   request.context = {
-    ...request.conext,
+    ...request.context,
     user: anonymousUserObject,
   };
 }
