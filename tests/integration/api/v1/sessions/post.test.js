@@ -1,7 +1,7 @@
 import { version as uuidVersion } from "uuid";
+import setCookieParser from "set-cookie-parser";
 import orchestrator from "tests/orchestrator.js";
 import session from "models/session.js";
-import setCookieParser from "set-cookie-parser";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
@@ -26,7 +26,6 @@ describe("POST /api/v1/sessions", () => {
           password: "123",
         }),
       });
-
       expect(response.status).toBe(401);
 
       const responseBody = await response.json();
@@ -54,7 +53,6 @@ describe("POST /api/v1/sessions", () => {
           password: "SenhaIncorreta",
         }),
       });
-
       expect(response.status).toBe(401);
 
       const responseBody = await response.json();
@@ -80,7 +78,6 @@ describe("POST /api/v1/sessions", () => {
           password: "SenhaIncorreta",
         }),
       });
-
       expect(response.status).toBe(401);
 
       const responseBody = await response.json();
@@ -98,6 +95,8 @@ describe("POST /api/v1/sessions", () => {
         email: "tudo.correto@email.com",
         password: "tudocorreto",
       });
+
+      await orchestrator.activateUser(createdUser);
 
       const response = await fetch("http://localhost:3000/api/v1/sessions", {
         method: "POST",
