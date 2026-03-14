@@ -230,7 +230,6 @@ async function setFeatures(userId, features) {
   return updatedUser;
 
   async function runUpdateQuery(userId, features) {
-    console.log("FEATURES:", features);
     const result = await database.query({
       text: `
       UPDATE
