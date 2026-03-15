@@ -7,7 +7,7 @@ import {
   NotFoundError,
   UnauthorizedError,
   ForbiddenError,
-} from "infra/errors";
+} from "infra/errors.js";
 import user from "models/user.js";
 import authorization from "models/authorization.js";
 
