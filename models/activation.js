@@ -105,7 +105,7 @@ async function markTokenAsUsed(activationTokenId) {
 async function activateUserByUserId(userId) {
   const userToActivate = await user.findOneById(userId);
 
-  if (!authorization.can(userToActivate, "read:activation-token")) {
+  if (!authorization.can(userToActivate, "read:activation_token")) {
     throw new ForbiddenError({
       message: "Você não pode mais utilizar tokens de ativação.",
       action: "Entre em contato com o suporte.",

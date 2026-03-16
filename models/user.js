@@ -34,7 +34,7 @@ async function create(userInputValues) {
   }
 
   function injectDefaultFeaturesInObject(userInputValues) {
-    userInputValues.features = ["read:activation-token"];
+    userInputValues.features = ["read:activation_token"];
   }
 }
 
