@@ -15,9 +15,64 @@ describe("GET /api/v1/status", () => {
       const parsedUpdatedAt = new Date(responseBody.updated_at).toISOString();
       expect(responseBody.updated_at).toEqual(parsedUpdatedAt);
 
-      expect(responseBody.dependencies.database.version).toEqual("16.13");
       expect(responseBody.dependencies.database.max_connections).toEqual(100);
+      expect(responseBody.dependencies.database.opened_connections).toEqual(1);
+      expect(responseBody.dependencies.database).not.toHaveProperty("version");
+    });
+  });
 
+  describe("Default User", () => {
+    test("Retrieving current system status", async () => {
+      const createdUser = await orchestrator.createUser({
+        password: "newPassword1",
+      });
+      const activatedUser = await orchestrator.activateUser(createdUser);
+      const sessionObject = await orchestrator.createSession(activatedUser.id);
+
+      const response = await fetch("http://localhost:3000/api/v1/status", {
+        headers: {
+          Cookie: `session_id=${sessionObject.token}`,
+        },
+      });
+      expect(response.status).toBe(200);
+
+      const responseBody = await response.json();
+
+      const parsedUpdatedAt = new Date(responseBody.updated_at).toISOString();
+      expect(responseBody.updated_at).toEqual(parsedUpdatedAt);
+
+      expect(responseBody.dependencies.database.max_connections).toEqual(100);
+      expect(responseBody.dependencies.database.opened_connections).toEqual(1);
+      expect(responseBody.dependencies.database).not.toHaveProperty("version");
+    });
+  });
+
+  describe("Priviliged User", () => {
+    test("Retrieving current system status", async () => {
+      const privilegedUser = await orchestrator.createUser();
+      const activatedprivilegedUser =
+        await orchestrator.activateUser(privilegedUser);
+
+      await orchestrator.addFeaturesToUser(privilegedUser, ["read:status:all"]);
+
+      const privilegedUserSessionObject = await orchestrator.createSession(
+        activatedprivilegedUser.id,
+      );
+
+      const response = await fetch("http://localhost:3000/api/v1/status", {
+        headers: {
+          Cookie: `session_id=${privilegedUserSessionObject.token}`,
+        },
+      });
+      expect(response.status).toBe(200);
+
+      const responseBody = await response.json();
+
+      const parsedUpdatedAt = new Date(responseBody.updated_at).toISOString();
+      expect(responseBody.updated_at).toEqual(parsedUpdatedAt);
+
+      expect(responseBody.dependencies.database.version).toMatch(/^16/);
+      expect(responseBody.dependencies.database.max_connections).toEqual(100);
       expect(responseBody.dependencies.database.opened_connections).toEqual(1);
     });
   });

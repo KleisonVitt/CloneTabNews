@@ -11,7 +11,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "22.18.0"
+          node-version-file: "package.json"
 
       # para não atualizar as dependências com o npm install, executando o package-lock.json sem atualiza-lo
       - run: npm ci

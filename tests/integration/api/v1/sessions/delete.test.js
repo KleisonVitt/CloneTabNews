@@ -38,9 +38,7 @@ describe("DELETE /api/v1/sessions", () => {
         now: new Date(Date.now() - session.EXPIRATION_IN_MILLISECONDS),
       });
 
-      const createdUser = await orchestrator.createUser({
-        username: "UserWithExpiredSession",
-      });
+      const createdUser = await orchestrator.createUser();
 
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
@@ -52,7 +50,6 @@ describe("DELETE /api/v1/sessions", () => {
           Cookie: `session_id=${sessionObject.token}`,
         },
       });
-
       expect(response.status).toBe(401);
 
       const responseBody = await response.json();
