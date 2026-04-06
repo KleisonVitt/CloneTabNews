@@ -93,7 +93,7 @@ describe("GET /api/v1/user", () => {
 
     test("With halfway-expired session", async () => {
       jest.useFakeTimers({
-        now: new Date(Date.now() - session.EXPIRATION_IN_MILLISECONDS / 2),
+        now: Date.now() - session.EXPIRATION_IN_MILLISECONDS / 2,
       });
 
       const createdUser = await orchestrator.createUser({
@@ -193,7 +193,7 @@ describe("GET /api/v1/user", () => {
 
     test("With expired session", async () => {
       jest.useFakeTimers({
-        now: new Date(Date.now() - session.EXPIRATION_IN_MILLISECONDS),
+        now: Date.now() - session.EXPIRATION_IN_MILLISECONDS,
       });
 
       const createdUser = await orchestrator.createUser({
