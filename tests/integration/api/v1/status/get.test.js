@@ -1,13 +1,16 @@
 import orchestrator from "tests/orchestrator.js";
+import webserver from "infra/webserver";
 
 beforeAll(async () => {
   await orchestrator.waitForAllServices();
+  await orchestrator.clearDatabase();
+  await orchestrator.runPendingMigrations();
 });
 
 describe("GET /api/v1/status", () => {
   describe("Anonymous User", () => {
     test("Retrieving current system status", async () => {
-      const response = await fetch("http://localhost:3000/api/v1/status");
+      const response = await fetch(`${webserver.origin}/api/v1/status`);
       expect(response.status).toBe(200);
 
       const responseBody = await response.json();
@@ -23,13 +26,11 @@ describe("GET /api/v1/status", () => {
 
   describe("Default User", () => {
     test("Retrieving current system status", async () => {
-      const createdUser = await orchestrator.createUser({
-        password: "newPassword1",
-      });
+      const createdUser = await orchestrator.createUser();
       const activatedUser = await orchestrator.activateUser(createdUser);
-      const sessionObject = await orchestrator.createSession(activatedUser.id);
+      const sessionObject = await orchestrator.createSession(activatedUser);
 
-      const response = await fetch("http://localhost:3000/api/v1/status", {
+      const response = await fetch(`${webserver.origin}/api/v1/status`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },
@@ -56,10 +57,10 @@ describe("GET /api/v1/status", () => {
       await orchestrator.addFeaturesToUser(privilegedUser, ["read:status:all"]);
 
       const privilegedUserSessionObject = await orchestrator.createSession(
-        activatedprivilegedUser.id,
+        activatedprivilegedUser,
       );
 
-      const response = await fetch("http://localhost:3000/api/v1/status", {
+      const response = await fetch(`${webserver.origin}/api/v1/status`, {
         headers: {
           Cookie: `session_id=${privilegedUserSessionObject.token}`,
         },
