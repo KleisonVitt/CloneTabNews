@@ -26,9 +26,7 @@ describe("GET /api/v1/status", () => {
 
   describe("Default User", () => {
     test("Retrieving current system status", async () => {
-      const createdUser = await orchestrator.createUser({
-        password: "newPassword1",
-      });
+      const createdUser = await orchestrator.createUser();
       const activatedUser = await orchestrator.activateUser(createdUser);
       const sessionObject = await orchestrator.createSession(activatedUser);
 
